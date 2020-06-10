@@ -1,6 +1,6 @@
-var express = require('express');
-var router = express.Router();
-var expressWs = require('express-ws')(router);
+const express = require('express')
+const router = express.Router()
+const expressWs = require('express-ws')(router)
 
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
