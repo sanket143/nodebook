@@ -1,9 +1,11 @@
 var net = require('net')
 
-var sock = net.connect(1337)
+var sock = net.connect(1431)
 
 process.stdin.pipe(sock)
-sock.pipe(process.stdout)
+sock.on("data", function(msg){
+  console.log("This is: ", msg.toString())
+})
 
 sock.on('connect', function () {
   process.stdin.resume();
