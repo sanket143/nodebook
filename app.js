@@ -4,6 +4,8 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const fs = require("fs")
+const repl = require('repl')
+const net = require('net')
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -11,7 +13,23 @@ const usersRouter = require('./routes/users');
 const app = express();
 const expressWs = require('express-ws')(app);
 
-const PORT = 4143
+const PORT = 41430
+const REPL_PORT = 41431
+
+net.createServer(function (socket) {
+  var r = repl.start({
+    prompt: "",
+    input: socket,
+    output: socket,
+    terminal: false,
+    useGlobal: false,
+    ignoreUndefined: true
+  })
+  r.on('exit', function () {
+    socket.end()
+  })
+  r.context.socket = socket
+}).listen(REPL_PORT)
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

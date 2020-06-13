@@ -3,7 +3,7 @@ const router = express.Router()
 const expressWs = require('express-ws')(router)
 const net = require('net')
 
-const sock = net.connect(4144)
+const sock = net.connect(41431)
 
 
 router.get('/', function(req, res, next) {
