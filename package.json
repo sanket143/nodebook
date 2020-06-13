@@ -1,17 +1,32 @@
 {
   "name": "nodebook",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "A web-based notebook environment for interactive computing with Node.js",
+  "author": "Sanket Chaudhari",
   "private": true,
   "scripts": {
-    "start": "node app.js"
+    "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
+    "build": "nuxt build",
+    "start": "cross-env NODE_ENV=production node server/index.js",
+    "generate": "nuxt generate",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "lint:fix": "eslint --fix --ext .js,.vue --ignore-path .gitignore ."
   },
   "dependencies": {
-    "cookie-parser": "~1.4.4",
-    "debug": "~2.6.9",
-    "ejs": "~2.6.1",
-    "express": "~4.16.1",
+    "@nuxtjs/axios": "^5.3.6",
+    "cross-env": "^5.2.0",
+    "express": "^4.16.4",
     "express-ws": "^4.0.0",
-    "http-errors": "~1.6.3",
-    "morgan": "~1.9.1"
+    "jquery": "^3.5.1",
+    "morgan": "^1.10.0",
+    "nuxt": "^2.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9",
+    "@nuxtjs/eslint-config": "^2.0.0",
+    "@nuxtjs/eslint-module": "^1.0.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^6.1.0",
+    "eslint-plugin-nuxt": ">=0.4.2"
   }
 }
