@@ -14,11 +14,13 @@ function getDomain(website){
   return domain
 }
 
+function sendMessage(msg){
+  socket.send(msg)
+}
 var domain = getDomain(location.toString())
 var socket = new WebSocket(`ws://${domain}/socket`)
 
 socket.onopen = function(event){
-  socket.send("hellooooo")
   console.log("opened")
 }
 
@@ -33,3 +35,10 @@ socket.onerror = function(event){
 socket.onclose = function(event){
   console.log(event)
 }
+
+$("#the-form").on("submit", (e) =>{
+  e.preventDefault()
+  msg = $("#message").val()
+
+  sendMessage(msg)
+})
