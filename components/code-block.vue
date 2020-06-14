@@ -13,7 +13,7 @@
 import Vue from "vue"
 
 import "codemirror/lib/codemirror.css"
-import "codemirror/theme/elegant.css"
+import "codemirror-github-light/lib/codemirror-github-light-theme.css"
 
 export default Vue.extend({
   data(){
@@ -21,8 +21,7 @@ export default Vue.extend({
       code: "",
       cmOptions: {
         tabSize: 4,
-        mode: "javascript",
-        theme: "elegant",
+        theme: "github-light",
         lineNumbers: false,
         line: true,
         extraKeys: {
