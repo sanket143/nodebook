@@ -11,7 +11,6 @@ const PORT = 41430
 
 // Import and Set Nuxt.js options
 const config = require("../nuxt.config.js")
-const indexRouter = require("./routes/index")
 const socketRouter = require("./routes/socket")
 config.dev = process.env.NODE_ENV !== "production"
 
@@ -33,8 +32,6 @@ async function start(){
   app.use(logger("dev"))
   app.use(express.json())
   app.use(express.urlencoded({ extended: false }))
-
-  app.use("/api", indexRouter)
 
   // error handler
   app.use(function(err, req, res, next){

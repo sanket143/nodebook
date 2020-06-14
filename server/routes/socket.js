@@ -1,13 +1,33 @@
 const net = require("net")
 const repl = require("repl")
 const REPL_PORT = 41431
-const router = require('express')();
+const router = require('express')()
+const { Writable, Readable } = require("stream")
 
-net.createServer((socket) => {
+module.exports = (socket) => {
+  const repl_out = new Writable({
+    write(chunk, encoding, callback){
+      socket.emit("message", chunk.toString())
+      callback()
+    }
+  })
+
+  const repl_in = new Readable({
+    read(){}
+  })
+
+  socket.resume = (msg) => {
+    console.log(msg)
+  }
+
+  socket.on("message", (msg) => {
+    repl_in.push(msg)
+  })
+
   const r = repl.start({
     prompt: "",
-    input: socket,
-    output: socket,
+    input: repl_in,
+    output: repl_out,
     preview: false,
     terminal: false,
     useGlobal: false,
@@ -16,38 +36,11 @@ net.createServer((socket) => {
   })
 
   r.on("exit", function(){
-    socket.end()
+    repl_in.push(null)
   })
 
   r.displayPrompt = () => {
     return
   }
-
-  r.context.socket = socket
-}).listen(REPL_PORT)
-
-const sock = net.connect(41431)
-
-module.exports = (socket) => {
-  socket.on("message", (msg) => {
-    sock.write(msg.code + "\r\n")
-  })
-
-  sock.on("data", (msg) => {
-    try {
-      socket.emit("message", msg.toString())
-    }
-    catch(e) {
-      console.log(e)
-    }
-  })
-
-  sock.on("close", function done(){
-    sock.removeListener("close", done)
-  })
-
-  sock.on("error", (err) => {
-    console.log(err)
-  })
   console.log("A user connected")
 }

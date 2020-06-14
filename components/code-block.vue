@@ -18,6 +18,7 @@ import "codemirror/theme/elegant.css"
 export default Vue.extend({
   data(){
     return {
+      code: "",
       cmOptions: {
         tabSize: 4,
         mode: "javascript",
@@ -37,17 +38,15 @@ export default Vue.extend({
       channel: "/"
     })
 
-    this.socket.on("message", (msg) => {
-      console.log(msg)
+    this.socket.on("message", (data) => {
+      console.log(data)
     })
+
+    window.socket = this.socket
   },
   methods: {
     execute(){
-      this.socket.emit("message", {
-        code: this.code
-      }, (resp) => {
-        console.log(resp)
-      })
+      this.socket.emit("message", this.code + "\r\n")
     },
     onCodeChange(newCode){
       this.code = newCode
