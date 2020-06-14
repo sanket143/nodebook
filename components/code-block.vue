@@ -44,7 +44,7 @@ export default Vue.extend({
   methods: {
     execute(){
       this.socket.emit("message", {
-        foo: "bar"
+        code: this.code
       }, (resp) => {
         console.log(resp)
       })
