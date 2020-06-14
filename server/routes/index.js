@@ -1,9 +1,7 @@
 const net = require("net")
 const repl = require("repl")
-const express = require("express")
-const router = express.Router()
 const REPL_PORT = 41431
-require("express-ws")(router)
+const router = require('express-ws-routes')();
 
 net.createServer((socket) => {
   const r = repl.start({
@@ -34,32 +32,41 @@ router.get("/", function(req, res, next){
   res.send("test")
 })
 
-router.ws("/socket", (ws, req) => {
-  ws.on("message", function(msg){
-    sock.write(msg + "\r\n")
-  })
+router.websocket("/socket", (info, cb) => {
 
-  ws.on("close", () => {
-    console.log("Close")
-  })
+  cb(ws => {
+    console.log(ws.upgradeReq)
+    ws.on("message", (msg) => {
+      sock.write(msg + "\r\n")
+    })
 
-  sock.on("data", (msg) => {
-    ws.send(msg.toString())
-  })
+    ws.on("close", () => {
+      console.log("Close")
+    })
 
-  sock.on("connect", () => {
-    process.stdin.resume()
-    process.stdin.setRawMode(true)
-  })
+    sock.on("data", (msg) => {
+      try {
+        ws.send(msg.toString())
+      }
+      catch(e) {
+        console.log(e)
+      }
+    })
 
-  sock.on("close", function done(){
-    process.stdin.setRawMode(false)
-    process.stdin.pause()
-    sock.removeListener("close", done)
-  })
+    sock.on("connect", () => {
+      process.stdin.resume()
+      process.stdin.setRawMode(true)
+    })
 
-  sock.on("error", (err) => {
-    console.log(err)
+    sock.on("close", function done(){
+      process.stdin.setRawMode(false)
+      process.stdin.pause()
+      sock.removeListener("close", done)
+    })
+
+    sock.on("error", (err) => {
+      console.log(err)
+    })
   })
 })
 

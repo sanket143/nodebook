@@ -1,16 +1,11 @@
 <template>
   <div>
-    <h1>Gag reflex</h1>
-    <form @submit.prevent="execute">
-      <input v-model="msg">
-      <client-only>
-        <codemirror
-          :value="code"
-          :options="cmOptions"
-          @input="onCodeChange"
-        />
-      </client-only>
-    </form>
+    <client-only>
+      <codemirror
+        :options="cmOptions"
+        @input="onCodeChange"
+      />
+    </client-only>
   </div>
 </template>
 
@@ -23,15 +18,18 @@ import "codemirror/theme/elegant.css"
 export default Vue.extend({
   data(){
     return {
-      msg: "",
       socket: false,
-      code: "const i = 10",
       cmOptions: {
         tabSize: 4,
         mode: "javascript",
         theme: "elegant",
         lineNumbers: false,
-        line: true
+        line: true,
+        extraKeys: {
+          "Ctrl-Enter": () => {
+            this.execute()
+          }
+        }
       }
     }
   },

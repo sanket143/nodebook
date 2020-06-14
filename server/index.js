@@ -3,10 +3,11 @@ const consola = require("consola")
 const { Nuxt, Builder } = require("nuxt")
 const logger = require("morgan")
 
-const app = express()
+const apap = express()
 
-require('express-ws')(app);
+require('express-ws')(apap);
 
+const app = require('express-ws-routes')();
 const PORT = 41430
 
 // Import and Set Nuxt.js options

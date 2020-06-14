@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <h1>HomePage</h1>
     <CodeBlock />
   </div>
 </template>
