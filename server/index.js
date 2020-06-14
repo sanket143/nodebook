@@ -3,16 +3,16 @@ const consola = require("consola")
 const { Nuxt, Builder } = require("nuxt")
 const logger = require("morgan")
 
-const apap = express()
+const app = express()
+const http = require('http').createServer(app)
+const io = require("socket.io")(http)
 
-require('express-ws')(apap);
-
-const app = require('express-ws-routes')();
 const PORT = 41430
 
 // Import and Set Nuxt.js options
 const config = require("../nuxt.config.js")
 const indexRouter = require("./routes/index")
+const socketRouter = require("./routes/socket")
 config.dev = process.env.NODE_ENV !== "production"
 
 async function start(){
@@ -49,7 +49,10 @@ async function start(){
 
   app.use(nuxt.render)
   // Listen the server
-  app.listen(PORT)
+  
+  io.on('connection', socketRouter) 
+
+  http.listen(PORT)
   consola.ready({
     message: `Server listening on http://${host}:${PORT}`,
     badge: true

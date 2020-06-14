@@ -18,7 +18,6 @@ import "codemirror/theme/elegant.css"
 export default Vue.extend({
   data(){
     return {
-      socket: false,
       cmOptions: {
         tabSize: 4,
         mode: "javascript",
@@ -34,48 +33,25 @@ export default Vue.extend({
     }
   },
   mounted(){
-    const domain = getDomain(location.toString())
-    this.socket = new WebSocket(`ws://${domain}/api/socket`)
+    this.socket = this.$nuxtSocket({
+      channel: "/"
+    })
 
-    this.socket.onopen = function(event){
-      console.log("opened")
-    }
-
-    this.socket.onmessage = function(event){
-      console.log(event)
-    }
-
-    this.socket.onerror = function(event){
-      console.log(event)
-    }
-
-    this.socket.onclose = function(event){
-      console.log(event)
-    }
+    this.socket.on("message", (msg) => {
+      console.log(msg)
+    })
   },
   methods: {
     execute(){
-      this.socket.send(this.code)
+      this.socket.emit("message", {
+        foo: "bar"
+      }, (resp) => {
+        console.log(resp)
+      })
     },
     onCodeChange(newCode){
       this.code = newCode
     }
   }
 })
-
-function getDomain(website){
-  let i = website.indexOf("://") + 3
-  let domain = ""
-
-  while(website.length > i){
-    domain += website[i]
-    i++
-
-    if(website[i] === "/"){
-      break
-    }
-  }
-
-  return domain
-}
 </script>
