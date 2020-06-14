@@ -16,8 +16,9 @@
 
 <script>
 import Vue from "vue"
+
 import "codemirror/lib/codemirror.css"
-import "codemirror/theme/neo.css"
+import "codemirror/theme/elegant.css"
 
 export default Vue.extend({
   data(){
@@ -28,8 +29,8 @@ export default Vue.extend({
       cmOptions: {
         tabSize: 4,
         mode: "javascript",
-        theme: "neo",
-        lineNumbers: true,
+        theme: "elegant",
+        lineNumbers: false,
         line: true
       }
     }

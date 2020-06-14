@@ -16,6 +16,7 @@ net.createServer((socket) => {
     completer: false,
     ignoreUndefined: true
   })
+
   r.on("exit", function(){
     socket.end()
   })
@@ -23,6 +24,7 @@ net.createServer((socket) => {
   r.displayPrompt = () => {
     return
   }
+
   r.context.socket = socket
 }).listen(REPL_PORT)
 
