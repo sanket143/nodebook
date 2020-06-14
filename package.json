@@ -19,7 +19,8 @@
     "express-ws": "^4.0.0",
     "jquery": "^3.5.1",
     "morgan": "^1.10.0",
-    "nuxt": "^2.0.0"
+    "nuxt": "^2.0.0",
+    "vue-codemirror": "^4.0.6"
   },
   "devDependencies": {
     "nodemon": "^1.18.9",

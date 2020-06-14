@@ -10,13 +10,19 @@ net.createServer((socket) => {
     prompt: "",
     input: socket,
     output: socket,
+    preview: false,
     terminal: false,
     useGlobal: false,
+    completer: false,
     ignoreUndefined: true
   })
   r.on("exit", function(){
     socket.end()
   })
+
+  r.displayPrompt = () => {
+    return
+  }
   r.context.socket = socket
 }).listen(REPL_PORT)
 
