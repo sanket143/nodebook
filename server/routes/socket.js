@@ -16,10 +16,6 @@ module.exports = (socket) => {
     read(){}
   })
 
-  socket.resume = (msg) => {
-    console.log(msg)
-  }
-
   socket.on("message", (msg) => {
     repl_in.push(msg)
   })

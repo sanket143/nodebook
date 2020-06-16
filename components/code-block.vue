@@ -1,11 +1,16 @@
 <template>
   <div>
     <client-only>
-      <codemirror
-        :options="cmOptions"
-        @input="onCodeChange"
-      />
+      <div class="code-wrapper">
+        <codemirror
+          :options="cmOptions"
+          @input="onCodeChange"
+        />
+      </div>
     </client-only>
+    <div class="output-wrapper">
+      <pre>{{ payload.output }}</pre>
+    </div>
   </div>
 </template>
 
@@ -16,14 +21,22 @@ import "codemirror/lib/codemirror.css"
 import "codemirror-github-light/lib/codemirror-github-light-theme.css"
 
 export default Vue.extend({
+  props: {
+    payload: {
+      required: true,
+      type: Object
+    }
+  },
   data(){
     return {
       code: "",
+      output: "",
       cmOptions: {
         tabSize: 4,
         theme: "github-light",
         lineNumbers: false,
         line: true,
+        indentWithTabs: false,
         extraKeys: {
           "Ctrl-Enter": () => {
             this.execute()
@@ -32,20 +45,13 @@ export default Vue.extend({
       }
     }
   },
-  mounted(){
-    this.socket = this.$nuxtSocket({
-      channel: "/"
-    })
-
-    this.socket.on("message", (data) => {
-      console.log(data)
-    })
-
-    window.socket = this.socket
-  },
   methods: {
     execute(){
-      this.socket.emit("message", this.code + "\r\n")
+      const obj = {
+        cell_id: this.payload.id,
+        code: this.code + "\r\n"
+      }
+      this.$emit("message", obj)
     },
     onCodeChange(newCode){
       this.code = newCode
@@ -53,3 +59,24 @@ export default Vue.extend({
   }
 })
 </script>
+
+<style>
+.CodeMirror {
+  height: auto;
+}
+
+.cm-s-github-light .CodeMirror-lines {
+  background: #fafafa;
+}
+</style>
+
+<style scoped>
+.code-wrapper {
+  background-color: whitesmoke;
+}
+.output-wrapper {
+  font-size: 12px;
+  padding: 4px;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+</style>
