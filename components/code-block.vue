@@ -1,16 +1,16 @@
 <template>
   <div>
-    <h1>Gag reflex</h1>
-    <form @submit.prevent="execute">
-      <input v-model="msg">
-      <client-only>
+    <client-only>
+      <div class="code-wrapper">
         <codemirror
-          :value="code"
           :options="cmOptions"
           @input="onCodeChange"
         />
-      </client-only>
-    </form>
+      </div>
+    </client-only>
+    <div class="output-wrapper">
+      <pre>{{ payload.output }}</pre>
+    </div>
   </div>
 </template>
 
@@ -18,66 +18,65 @@
 import Vue from "vue"
 
 import "codemirror/lib/codemirror.css"
-import "codemirror/theme/elegant.css"
+import "codemirror-github-light/lib/codemirror-github-light-theme.css"
 
 export default Vue.extend({
-  data(){
-    return {
-      msg: "",
-      socket: false,
-      code: "const i = 10",
-      cmOptions: {
-        tabSize: 4,
-        mode: "javascript",
-        theme: "elegant",
-        lineNumbers: false,
-        line: true
-      }
+  props: {
+    payload: {
+      required: true,
+      type: Object
     }
   },
-  mounted(){
-    const domain = getDomain(location.toString())
-    this.socket = new WebSocket(`ws://${domain}/api/socket`)
-
-    this.socket.onopen = function(event){
-      console.log("opened")
-    }
-
-    this.socket.onmessage = function(event){
-      console.log(event)
-    }
-
-    this.socket.onerror = function(event){
-      console.log(event)
-    }
-
-    this.socket.onclose = function(event){
-      console.log(event)
+  data(){
+    return {
+      code: "",
+      output: "",
+      cmOptions: {
+        tabSize: 4,
+        theme: "github-light",
+        lineNumbers: false,
+        line: true,
+        indentWithTabs: false,
+        extraKeys: {
+          "Ctrl-Enter": () => {
+            this.execute()
+          }
+        }
+      }
     }
   },
   methods: {
     execute(){
-      this.socket.send(this.code)
+      const obj = {
+        cell_id: this.payload.id,
+        code: this.code + "\r\n"
+      }
+      this.$emit("message", obj)
     },
     onCodeChange(newCode){
       this.code = newCode
     }
   }
 })
-
-function getDomain(website){
-  let i = website.indexOf("://") + 3
-  let domain = ""
-
-  while(website.length > i){
-    domain += website[i]
-    i++
-
-    if(website[i] === "/"){
-      break
-    }
-  }
-
-  return domain
-}
 </script>
+
+<style>
+.CodeMirror {
+  height: auto;
+}
+
+.cm-s-github-light .CodeMirror-lines {
+  background: #fafafa;
+}
+</style>
+
+<style scoped>
+.code-wrapper {
+  background-color: whitesmoke;
+}
+.output-wrapper {
+  font-size: 12px;
+  padding: 4px;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+</style>

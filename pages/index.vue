@@ -1,16 +1,7 @@
 <template>
   <div class="container">
-    <h1>HomePage</h1>
-    <CodeBlock />
+    <nuxt-link to="/book">
+      Book
+    </nuxt-link>
   </div>
 </template>
-
-<script>
-import CodeBlock from "~/components/code-block.vue"
-
-export default {
-  components: {
-    CodeBlock
-  }
-}
-</script>

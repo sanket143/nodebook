@@ -2,7 +2,7 @@
   "name": "nodebook",
   "version": "1.0.0",
   "description": "A web-based notebook environment for interactive computing with Node.js",
-  "author": "Sanket Chaudhari",
+  "author": "Sanket Chaudhari & Jahnavi Gupta",
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
@@ -14,12 +14,17 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
+    "codemirror-github-light": "^0.4.2",
+    "codemirror-theme-github": "^1.0.0",
     "cross-env": "^5.2.0",
     "express": "^4.16.4",
     "express-ws": "^4.0.0",
+    "express-ws-routes": "^1.1.0",
     "jquery": "^3.5.1",
     "morgan": "^1.10.0",
     "nuxt": "^2.0.0",
+    "nuxt-socket-io": "^1.1.1",
+    "socket.io": "^2.3.0",
     "vue-codemirror": "^4.0.6"
   },
   "devDependencies": {

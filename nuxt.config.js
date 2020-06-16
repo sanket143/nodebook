@@ -18,7 +18,7 @@ module.exports = {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: "#fff" },
+  loading: { color: "#000" },
   /*
   ** Global CSS
   */
@@ -42,8 +42,16 @@ module.exports = {
   */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    "@nuxtjs/axios"
+    "@nuxtjs/axios",
+    "nuxt-socket-io"
   ],
+  io: {
+    // module options
+    sockets: [{
+      name: 'main',
+      url: 'http://localhost:41430'
+    }]
+  },
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options

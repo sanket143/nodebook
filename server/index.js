@@ -4,14 +4,14 @@ const { Nuxt, Builder } = require("nuxt")
 const logger = require("morgan")
 
 const app = express()
-
-require('express-ws')(app);
+const http = require('http').createServer(app)
+const io = require("socket.io")(http)
 
 const PORT = 41430
 
 // Import and Set Nuxt.js options
 const config = require("../nuxt.config.js")
-const indexRouter = require("./routes/index")
+const socketRouter = require("./routes/socket")
 config.dev = process.env.NODE_ENV !== "production"
 
 async function start(){
@@ -33,8 +33,6 @@ async function start(){
   app.use(express.json())
   app.use(express.urlencoded({ extended: false }))
 
-  app.use("/api", indexRouter)
-
   // error handler
   app.use(function(err, req, res, next){
     // set locals, only providing error in development
@@ -48,7 +46,10 @@ async function start(){
 
   app.use(nuxt.render)
   // Listen the server
-  app.listen(PORT)
+  
+  io.on('connection', socketRouter) 
+
+  http.listen(PORT)
   consola.ready({
     message: `Server listening on http://${host}:${PORT}`,
     badge: true
