@@ -2,16 +2,19 @@
   <div class="container">
     <div v-for="block in blocks" :key="block.id">
       <CodeBlock :payload="block" @message="messageHandler" />
+      <MarkDownBlock />
     </div>
   </div>
 </template>
 
 <script>
 import CodeBlock from "~/components/code-block.vue"
+import MarkDownBlock from "~/components/markdown-block.vue"
 
 export default {
   components: {
-    CodeBlock
+    CodeBlock,
+    MarkDownBlock
   },
   data(){
     return {

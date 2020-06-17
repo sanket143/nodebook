@@ -5,6 +5,10 @@
 </template>
 
 <style>
+:root {
+  --space-0: 10px;
+}
+
 html {
   font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
     Roboto, 'Helvetica Neue', Arial, sans-serif;

@@ -35,6 +35,7 @@ export default Vue.extend({
         tabSize: 4,
         theme: "github-light",
         lineNumbers: false,
+        mode: "javascript",
         line: true,
         indentWithTabs: false,
         extraKeys: {
