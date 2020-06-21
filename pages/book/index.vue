@@ -1,8 +1,8 @@
 <template>
   <div class="container">
-    <div v-for="block in blocks" :key="block.id">
-      <CodeBlock :payload="block" @message="messageHandler" />
-      <MarkDownBlock />
+    <div v-for="(block, index) in blocks" :key="block.id">
+      <CodeBlock :payload="{ id: index, current: currentCell, block }" @message="messageHandler" />
+      <MarkDownBlock :payload="{ id: index, current: currentCell, block }" @message="messageHandler" />
     </div>
   </div>
 </template>
@@ -20,9 +20,9 @@ export default {
     return {
       currentCell: 0,
       blocks: [
-        { id: 0, output: "" },
-        { id: 1, output: "" },
-        { id: 2, output: "" }
+        { output: "" },
+        { output: "" },
+        { output: "" }
       ]
     }
   },
@@ -43,6 +43,12 @@ export default {
       this.currentCell = data.cell_id
       this.blocks[this.currentCell].output = ""
       this.socket.emit("message", data.code)
+    },
+    getPayload(index){
+      return {
+        block: this.block[index],
+        active: index === this.currentCell
+      }
     }
   }
 }

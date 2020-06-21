@@ -8,8 +8,16 @@
         />
       </div>
     </client-only>
-    <div class="output-wrapper">
-      <pre>{{ payload.output }}</pre>
+    <div class="output-wrapper" v-show="payload.block.output.length > 0">
+      <pre>{{ payload.block.output }}</pre>
+    </div>
+    <div class="block-options" v-show="payload.id === payload.current">
+      <div class="block-option link">
+        [ code ]
+      </div>
+      <div class="block-option link">
+        [ markdown ]
+      </div>
     </div>
   </div>
 </template>
@@ -72,6 +80,15 @@ export default Vue.extend({
 </style>
 
 <style scoped>
+.block-options {
+  padding: 10px 4px;
+  display: flex;
+}
+
+.block-option {
+  margin-right: var(--space-1);
+}
+
 .code-wrapper {
   background-color: whitesmoke;
 }

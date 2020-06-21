@@ -8,7 +8,17 @@
         />
       </div>
     </client-only>
-    <vue-markdown :source="output" />
+    <div class="markdown-wrapper" v-show="output.length > 0">
+      <vue-markdown :source="output" />
+    </div>
+    <div class="block-options">
+      <div class="block-option link">
+        [ code ]
+      </div>
+      <div class="block-option link">
+        [ markdown ]
+      </div>
+    </div>
   </div>
 </template>
 
@@ -16,6 +26,12 @@
 import VueMarkdown from "vue-markdown"
 
 export default {
+  props: {
+    payload: {
+      required: true,
+      type: Object
+    }
+  },
   components: {
     VueMarkdown
   },
@@ -48,3 +64,23 @@ export default {
   }
 }
 </script>
+
+<style>
+ul {
+  padding-left: 20px;
+}
+.markdown-wrapper {
+  padding: var(--space-1) 4px;
+}
+</style>
+
+<style scoped>
+.block-options {
+  padding: 10px 4px;
+  display: flex;
+}
+
+.block-option {
+  margin-right: var(--space-1);
+}
+</style>
