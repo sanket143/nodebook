@@ -8,7 +8,7 @@
         />
       </div>
     </client-only>
-    <div class="markdown-wrapper" v-show="output.length > 0">
+    <div v-show="output.length > 0" class="markdown-wrapper">
       <vue-markdown :source="output" />
     </div>
     <div class="block-options">
@@ -26,14 +26,14 @@
 import VueMarkdown from "vue-markdown"
 
 export default {
+  components: {
+    VueMarkdown
+  },
   props: {
     payload: {
       required: true,
       type: Object
     }
-  },
-  components: {
-    VueMarkdown
   },
   data(){
     return {

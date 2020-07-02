@@ -28,6 +28,7 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
 :root {
+  --primary-swatch: #424242;
   --space-1: 10px;
   --size-1: 12px;
 }
@@ -61,7 +62,7 @@ html {
 }
 
 .link {
-  color: #006880;
+  color: var(--primary-swatch);
   cursor: pointer;
   text-decoration: none;
 }

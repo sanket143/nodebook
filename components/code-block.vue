@@ -8,10 +8,10 @@
         />
       </div>
     </client-only>
-    <div class="output-wrapper" v-show="payload.block.output.length > 0">
+    <div v-show="payload.block.output.length > 0" class="output-wrapper">
       <pre>{{ payload.block.output }}</pre>
     </div>
-    <div class="block-options" v-show="payload.id === payload.current">
+    <div v-show="payload.id === payload.current" class="block-options">
       <div class="block-option link">
         [ code ]
       </div>

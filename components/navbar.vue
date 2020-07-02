@@ -1,6 +1,8 @@
 <template>
   <div class="navbar-wrapper">
-    <h2 contenteditable spellcheck=false>Untitled</h2>
+    <h2 contenteditable spellcheck="false">
+      Untitled
+    </h2>
   </div>
 </template>
 
@@ -8,6 +10,6 @@
 .navbar-wrapper {
   color: white;
   padding: 5px;
-  background: #689f63;
+  background: var(--primary-swatch);
 }
 </style>
