@@ -12,10 +12,10 @@
       <pre>{{ payload.block.output }}</pre>
     </div>
     <div v-show="payload.id === payload.current" class="block-options">
-      <div class="block-option link">
+      <div class="block-option link" @click="addCell('CODE')">
         [ code ]
       </div>
-      <div class="block-option link">
+      <div class="block-option link" @click="addCell('MARKDOWN')">
         [ markdown ]
       </div>
     </div>
@@ -57,13 +57,28 @@ export default Vue.extend({
   methods: {
     execute(){
       const obj = {
-        cell_id: this.payload.id,
-        code: this.code + "\r\n"
+        action: "EXECUTE",
+        payload: {
+          cell_id: this.payload.id,
+          code: this.code + "\r\n"
+        }
       }
       this.$emit("message", obj)
     },
     onCodeChange(newCode){
       this.code = newCode
+    },
+    addCell(type){
+      console.log("New code")
+      const obj = {
+        action: "NEWCELL",
+        payload: {
+          type,
+          cell_id: this.payload.id
+        }
+      }
+
+      this.$emit("message", obj)
     }
   }
 })

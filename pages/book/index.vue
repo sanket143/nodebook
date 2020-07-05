@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div v-for="(block, index) in blocks" :key="block.id">
-      <CodeBlock :payload="{ id: index, current: currentCell, block }" @message="messageHandler" />
-      <MarkDownBlock :payload="{ id: index, current: currentCell, block }" @message="messageHandler" />
+      <CodeBlock v-if="block.type == 'CODE'" :payload="{ id: index, current: currentCell, block }" @message="messageHandler" />
+      <MarkDownBlock v-else-if="block.type == 'MARKDOWN'" :payload="{ id: index, current: currentCell, block }" @message="messageHandler" />
     </div>
   </div>
 </template>
@@ -20,9 +20,14 @@ export default {
     return {
       currentCell: 0,
       blocks: [
-        { output: "" },
-        { output: "" },
-        { output: "" }
+        {
+          type: "MARKDOWN",
+          output: ""
+        },
+        {
+          type: "CODE",
+          output: ""
+        }
       ]
     }
   },
@@ -40,9 +45,18 @@ export default {
   },
   methods: {
     messageHandler(data){
-      this.currentCell = data.cell_id
-      this.blocks[this.currentCell].output = ""
-      this.socket.emit("message", data.code)
+      const payload = data.payload
+
+      if(data.action === "EXECUTE"){
+        this.currentCell = payload.cell_id
+        this.blocks[this.currentCell].output = ""
+        this.socket.emit("message", data.payload.code)
+      } else if(data.action === "NEWCELL"){
+        this.blocks.splice(payload.cell_id + 1, 0, {
+          type: payload.type,
+          output: ""
+        })
+      }
     },
     getPayload(index){
       return {

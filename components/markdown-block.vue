@@ -9,13 +9,15 @@
       </div>
     </client-only>
     <div v-show="output.length > 0" class="markdown-wrapper">
-      <vue-markdown :source="output" />
+      <client-only>
+        <vue-markdown :source="output" />
+      </client-only>
     </div>
     <div class="block-options">
-      <div class="block-option link">
+      <div class="block-option link" @click="addCell('CODE')">
         [ code ]
       </div>
-      <div class="block-option link">
+      <div class="block-option link" @click="addCell('MARKDOWN')">
         [ markdown ]
       </div>
     </div>
@@ -55,11 +57,23 @@ export default {
     }
   },
   methods: {
+    execute(){
+      this.output = this.code
+    },
     onCodeChange(newCode){
       this.code = newCode
     },
-    execute(){
-      this.output = this.code
+    addCell(type){
+      console.log("New code")
+      const obj = {
+        action: "NEWCELL",
+        payload: {
+          type,
+          cell_id: this.payload.id
+        }
+      }
+
+      this.$emit("message", obj)
     }
   }
 }
