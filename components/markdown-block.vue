@@ -20,6 +20,9 @@
       <div class="block-option link" @click="addCell('MARKDOWN')">
         [ markdown ]
       </div>
+      <div class="block-option link" @click="deleteCell">
+        [ delete ]
+      </div>
     </div>
   </div>
 </template>
@@ -64,12 +67,21 @@ export default {
       this.code = newCode
     },
     addCell(type){
-      console.log("New code")
       const obj = {
         action: "NEWCELL",
         payload: {
           type,
-          cell_id: this.payload.id
+          cell_index: this.payload.index
+        }
+      }
+
+      this.$emit("message", obj)
+    },
+    deleteCell(){
+      const obj = {
+        action: "DELETE",
+        payload: {
+          cell_index: this.payload.index
         }
       }
 

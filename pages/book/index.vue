@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div v-for="(block, index) in blocks" :key="block.id">
-      <CodeBlock v-if="block.type == 'CODE'" :payload="{ id: index, current: currentCell, block }" @message="messageHandler" />
-      <MarkDownBlock v-else-if="block.type == 'MARKDOWN'" :payload="{ id: index, current: currentCell, block }" @message="messageHandler" />
+      <CodeBlock v-if="block.type == 'CODE'" :payload="{ index, current: currentCell, block }" @message="messageHandler" />
+      <MarkDownBlock v-else-if="block.type == 'MARKDOWN'" :payload="{ index, current: currentCell, block }" @message="messageHandler" />
     </div>
   </div>
 </template>
@@ -18,14 +18,12 @@ export default {
   },
   data(){
     return {
+      count: 1,
       currentCell: 0,
       blocks: [
         {
+          id: 0,
           type: "MARKDOWN",
-          output: ""
-        },
-        {
-          type: "CODE",
           output: ""
         }
       ]
@@ -48,14 +46,17 @@ export default {
       const payload = data.payload
 
       if(data.action === "EXECUTE"){
-        this.currentCell = payload.cell_id
+        this.currentCell = payload.cell_index
         this.blocks[this.currentCell].output = ""
         this.socket.emit("message", data.payload.code)
       } else if(data.action === "NEWCELL"){
-        this.blocks.splice(payload.cell_id + 1, 0, {
+        this.blocks.splice(payload.cell_index + 1, 0, {
           type: payload.type,
-          output: ""
+          output: "",
+          id: this.count++
         })
+      } else if(data.action === "DELETE"){
+        this.blocks.splice(payload.cell_index, 1)
       }
     },
     getPayload(index){
