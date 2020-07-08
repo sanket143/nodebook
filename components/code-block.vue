@@ -8,8 +8,19 @@
         />
       </div>
     </client-only>
-    <div class="output-wrapper">
-      <pre>{{ payload.output }}</pre>
+    <div v-show="payload.block.output.length > 0" class="output-wrapper">
+      <pre>{{ payload.block.output }}</pre>
+    </div>
+    <div v-show="payload.index === payload.current" class="block-options">
+      <div class="block-option link" @click="addCell('CODE')">
+        [ code ]
+      </div>
+      <div class="block-option link" @click="addCell('MARKDOWN')">
+        [ markdown ]
+      </div>
+      <div class="block-option link" @click="deleteCell">
+        [ delete ]
+      </div>
     </div>
   </div>
 </template>
@@ -30,7 +41,6 @@ export default Vue.extend({
   data(){
     return {
       code: "",
-      output: "",
       cmOptions: {
         tabSize: 4,
         theme: "github-light",
@@ -49,13 +59,37 @@ export default Vue.extend({
   methods: {
     execute(){
       const obj = {
-        cell_id: this.payload.id,
-        code: this.code + "\r\n"
+        action: "EXECUTE",
+        payload: {
+          cell_index: this.payload.index,
+          code: this.code + "\r\n"
+        }
       }
       this.$emit("message", obj)
     },
     onCodeChange(newCode){
       this.code = newCode
+    },
+    addCell(type){
+      const obj = {
+        action: "NEWCELL",
+        payload: {
+          type,
+          cell_index: this.payload.index
+        }
+      }
+
+      this.$emit("message", obj)
+    },
+    deleteCell(){
+      const obj = {
+        action: "DELETE",
+        payload: {
+          cell_index: this.payload.index
+        }
+      }
+
+      this.$emit("message", obj)
     }
   }
 })
@@ -72,6 +106,15 @@ export default Vue.extend({
 </style>
 
 <style scoped>
+.block-options {
+  padding: 10px 4px;
+  display: flex;
+}
+
+.block-option {
+  margin-right: var(--space-1);
+}
+
 .code-wrapper {
   background-color: whitesmoke;
 }

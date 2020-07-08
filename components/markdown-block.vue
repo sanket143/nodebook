@@ -8,7 +8,22 @@
         />
       </div>
     </client-only>
-    <vue-markdown :source="output" />
+    <div v-show="output.length > 0" class="markdown-wrapper">
+      <client-only>
+        <vue-markdown :source="output" />
+      </client-only>
+    </div>
+    <div class="block-options">
+      <div class="block-option link" @click="addCell('CODE')">
+        [ code ]
+      </div>
+      <div class="block-option link" @click="addCell('MARKDOWN')">
+        [ markdown ]
+      </div>
+      <div class="block-option link" @click="deleteCell">
+        [ delete ]
+      </div>
+    </div>
   </div>
 </template>
 
@@ -18,6 +33,12 @@ import VueMarkdown from "vue-markdown"
 export default {
   components: {
     VueMarkdown
+  },
+  props: {
+    payload: {
+      required: true,
+      type: Object
+    }
   },
   data(){
     return {
@@ -39,12 +60,53 @@ export default {
     }
   },
   methods: {
+    execute(){
+      this.output = this.code
+    },
     onCodeChange(newCode){
       this.code = newCode
     },
-    execute(){
-      this.output = this.code
+    addCell(type){
+      const obj = {
+        action: "NEWCELL",
+        payload: {
+          type,
+          cell_index: this.payload.index
+        }
+      }
+
+      this.$emit("message", obj)
+    },
+    deleteCell(){
+      const obj = {
+        action: "DELETE",
+        payload: {
+          cell_index: this.payload.index
+        }
+      }
+
+      this.$emit("message", obj)
     }
   }
 }
 </script>
+
+<style>
+ul {
+  padding-left: 20px;
+}
+.markdown-wrapper {
+  padding: var(--space-1) 4px;
+}
+</style>
+
+<style scoped>
+.block-options {
+  padding: 10px 4px;
+  display: flex;
+}
+
+.block-option {
+  margin-right: var(--space-1);
+}
+</style>
