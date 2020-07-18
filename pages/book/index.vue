@@ -57,6 +57,8 @@ export default {
         })
       } else if(data.action === "DELETE"){
         this.blocks.splice(payload.cell_index, 1)
+      } else if(data.action === "UPDATE_ACTIVE"){
+        this.currentCell = payload.cell_index
       }
     },
     getPayload(index){

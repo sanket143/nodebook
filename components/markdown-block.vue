@@ -1,7 +1,7 @@
 <template>
   <div>
     <client-only>
-      <div class="code-wrapper">
+      <div class="code-wrapper" @click="active">
         <codemirror
           :options="cmOptions"
           @input="onCodeChange"
@@ -13,7 +13,7 @@
         <vue-markdown :source="output" />
       </client-only>
     </div>
-    <div class="block-options">
+    <div v-show="payload.index === payload.current" class="block-options">
       <div class="block-option link" @click="addCell('CODE')">
         [ code ]
       </div>
@@ -86,6 +86,16 @@ export default {
       }
 
       this.$emit("message", obj)
+    },
+    active(){
+      const obj = {
+        action: "UPDATE_ACTIVE",
+        payload: {
+          cell_index: this.payload.index
+        }
+      }
+
+      this.$emit("message", obj)
     }
   }
 }
@@ -95,14 +105,20 @@ export default {
 ul {
   padding-left: 20px;
 }
+
 .markdown-wrapper {
-  padding: var(--space-1) 4px;
+  padding: 0 4px;
+  margin-bottom: var(--space-1);
+}
+
+.code-wrapper {
+  margin: var(--space-1) 0;
 }
 </style>
 
 <style scoped>
 .block-options {
-  padding: 10px 4px;
+  padding: 0 4px;
   display: flex;
 }
 

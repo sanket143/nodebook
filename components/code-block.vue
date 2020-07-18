@@ -1,7 +1,7 @@
 <template>
   <div>
     <client-only>
-      <div class="code-wrapper">
+      <div class="code-wrapper" @click="active">
         <codemirror
           :options="cmOptions"
           @input="onCodeChange"
@@ -65,6 +65,7 @@ export default Vue.extend({
           code: this.code + "\r\n"
         }
       }
+
       this.$emit("message", obj)
     },
     onCodeChange(newCode){
@@ -90,6 +91,16 @@ export default Vue.extend({
       }
 
       this.$emit("message", obj)
+    },
+    active(){
+      const obj = {
+        action: "UPDATE_ACTIVE",
+        payload: {
+          cell_index: this.payload.index
+        }
+      }
+
+      this.$emit("message", obj)
     }
   }
 })
@@ -107,7 +118,7 @@ export default Vue.extend({
 
 <style scoped>
 .block-options {
-  padding: 10px 4px;
+  padding: 4px;
   display: flex;
 }
 

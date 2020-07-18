@@ -29,7 +29,7 @@ export default {
 
 :root {
   --primary-swatch: #424242;
-  --space-1: 10px;
+  --space-1: 8px;
   --size-1: 12px;
 }
 
